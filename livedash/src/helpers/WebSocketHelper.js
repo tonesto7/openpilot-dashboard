@@ -56,11 +56,14 @@ export class WebSocketHelper extends Component {
 
         ws.onmessage = (event) => {
             try {
-                const data = JSON.parse(event.data);
+                // Preprocess the message to replace 'NaN' with 'null'
+                const processedMessage = event.data.replace(/NaN/g, "null");
 
-                // Check if the message contains the list of publishers and signals
+                // Parse the processed message
+                const data = JSON.parse(processedMessage);
+
+                // Rest of your logic
                 if (data.publishers && data.signals) {
-                    // Update the state of your application with the new list
                     this.props.updatePublishersAndSignals(data.publishers, data.signals);
                 } else {
                     this.props.messageProcess(data);

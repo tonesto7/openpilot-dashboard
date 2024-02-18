@@ -88,8 +88,12 @@ class InterBridge:
       send_msg = {}
       for publisher in self.publishers:
         if self.sm.updated[publisher]:
-          send_msg[publisher] = self.sm[publisher].to_dict()
-          send_msg[publisher]['logMonoTime'] = self.sm.logMonoTime[publisher]
+          message = self.sm[publisher]
+          if hasattr(message, 'to_dict'):
+            send_msg[publisher] = message.to_dict()
+            send_msg[publisher]['logMonoTime'] = self.sm.logMonoTime[publisher]
+          else:
+            print(f"Warning: Message from publisher '{publisher}' does not have a 'to_dict()' method.")
           # Hack, convert known bytes value to hex (bytes are not serializable)
           if publisher == 'carParams' and send_msg[publisher]['carFw']:
             for idx, val in enumerate(send_msg[publisher]['carFw']):

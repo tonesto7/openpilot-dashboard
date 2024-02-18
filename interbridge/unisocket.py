@@ -185,14 +185,23 @@ class MixedSocketHandler(StreamRequestHandler):
   def write_websocket(self, msg, opcode=OPCODE_TEXT):
     if not msg:
       return
-    # Validate message
-    if not isinstance(msg, (bytes, bytearray)):
-      msg = json.dumps(msg, skipkeys=True).encode()
 
-    header  = bytearray()
+    # Validate and prepare message for sending
+    if isinstance(msg, (bytes, bytearray)):
+      # If the message is bytes, encode it as a base64 string
+      msg = b64encode(msg).decode('ascii')
+    elif not isinstance(msg, str):
+      # If the message is not a string or bytes, attempt to serialize it as JSON
+      msg = json.dumps(msg, skipkeys=True, default=self.bytes_to_base64).encode()
+    else:
+      # If it's already a string, encode it to bytes
+      msg = msg.encode()
+
+    header = bytearray()
     payload = msg
     payload_len = len(payload)
 
+    # Construct the WebSocket frame
     if payload_len <= 125:
       header.append(FIN | opcode)
       header.append(payload_len)
@@ -200,19 +209,23 @@ class MixedSocketHandler(StreamRequestHandler):
       header.append(FIN | opcode)
       header.append(PAYLOAD_LEN_EXT16)
       header.extend(struct.pack(">H", payload_len))
-    elif payload_len < 18446744073709551616:
+    else:  # payload_len < 18446744073709551616
       header.append(FIN | opcode)
       header.append(PAYLOAD_LEN_EXT64)
       header.extend(struct.pack(">Q", payload_len))
 
     try:
-      #self.request.send(header + payload)
       self.wfile.write(header + payload)
-      return
     except (ConnectionAbortedError, OSError):
       self.is_connected = False
       self.handshaked = False
-      return
+
+  def bytes_to_base64(self, obj):
+    """Custom JSON serializer for bytes objects."""
+    if isinstance(obj, bytes):
+      return b64encode(obj).decode('ascii')
+    raise TypeError('Object not serializable')
+
 
   def write_socket(self, msg):
     if not msg:
