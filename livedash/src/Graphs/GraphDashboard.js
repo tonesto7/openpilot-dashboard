@@ -222,7 +222,7 @@ class GraphDashboard extends Component {
         const { classes } = this.props;
         return (
             <Fragment>
-                <Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
+                <Grid container direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
                     {this.renderReadyPlots()}
                 </Grid>
                 {this.state.show_addlines ? (

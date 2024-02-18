@@ -149,7 +149,7 @@ class Joystick extends Component {
         const { classes } = this.props;
         return (
             <Fragment>
-                <Grid className={classes.joystick} container spacing={0} direction="row" justify="center" alignItems="center">
+                <Grid className={classes.joystick} container spacing={0} direction="row" justifyContent="center" alignItems="center">
                     <Grid item xs={6} align="center">
                         <Typography variant="subtitle2">
                             X:{this.joystick_msg.testJoystick.axes[0].toFixed(3)} / Y:{this.joystick_msg.testJoystick.axes[1].toFixed(3)}
@@ -160,8 +160,8 @@ class Joystick extends Component {
                                     mode: "semi",
                                     position: { top: "50%", left: "50%" },
                                     color: "red",
-                                    size: 200,
                                     dynamicPage: true,
+                                    size: 200,
                                     lockX: false,
                                     lockY: false,
                                     restJoystick: this.joy_finetune.restJoystick_0,

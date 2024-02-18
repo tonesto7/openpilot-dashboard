@@ -168,7 +168,7 @@ class OPEdit extends Component {
         return (
             <Fragment>
                 <div style={{ padding: 20 }}>
-                    <Grid container spacing={2} direction="row" justify="flex-start" alignItems="center">
+                    <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="center">
                         {this.renderParams(op_data)}
                         <Grid item></Grid>
                     </Grid>
