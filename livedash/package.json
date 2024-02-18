@@ -10,7 +10,7 @@
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^11.2.7",
         "@testing-library/user-event": "^12.8.3",
-        "plotly.js": "^1.58.5",
+        "plotly.js": "^2.25.2",
         "plotly.js-basic-dist": "^1.58.5",
         "plotly.js-basic-dist-min": "^1.58.5",
         "plotly.js-gl2d-dist": "^1.58.5",
