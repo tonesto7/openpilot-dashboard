@@ -72,6 +72,7 @@ class App extends Component {
 
     messageProcess = (msg_recv) => {
         // Received messages must be pushed to child component for better performance
+        console.log("Received message:", msg_recv);
         if (this.received_count > 9999) this.received_count = 0;
         this.received_count += 1;
         if ("error" in msg_recv) {
@@ -193,6 +194,9 @@ class App extends Component {
                             setSettings={(ws_url, rate, dark_theme) => {
                                 this.setState({ show_mainsettings: false, ws_url: ws_url, rateHz: rate });
                                 this.setTheme(dark_theme);
+                                // Attempt to reconnect to the new WebSocket URL
+                                console.log("Attempting to reconnect to the new WebSocket URL");
+                                this.wshelper.current.connect(ws_url);
                             }}
                             show={this.state.show_mainsettings}
                             ws_url={this.state.ws_url}

@@ -36,6 +36,7 @@ export class WebSocketHelper extends Component {
         ws.onopen = () => {
             this.setState({ ws: ws });
             this.props.status("connected");
+            console.log("Connected to WebSocket at :", this.props.ws_url);
             that.timeout = 250;
             clearTimeout(connectInterval);
         };
@@ -82,7 +83,10 @@ export class WebSocketHelper extends Component {
 
     checkSocketConnection = () => {
         const { ws } = this.state;
-        if (!ws || ws.readyState === WebSocket.CLOSED) this.connect(this.props.ws_url);
+        if (!ws || ws.readyState === WebSocket.CLOSED) {
+            console.log("WebSocket is closed. Reconnect will be attempted");
+            this.connect(this.props.ws_url);
+        }
     };
 
     render() {

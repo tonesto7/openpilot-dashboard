@@ -21,6 +21,7 @@ export class AddGraph extends Component {
     }
 
     renderButtons = () => {
+        console.log("Rendering buttons with lines:", this.props.lines_available);
         return this.props.lines_available.map((key) => {
             return (
                 <ToggleButton style={{ textTransform: "none", borderRadius: "0", minWidth: "25ch", maxHeight: "20px" }} value={key} key={key} aria-label={key}>
@@ -31,7 +32,7 @@ export class AddGraph extends Component {
     };
 
     render() {
-        //console.log("Rendering AddGraph");
+        console.log("Rendering AddGraph", this.props.show);
         return (
             <Dialog open={this.props.show} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add Graph</DialogTitle>

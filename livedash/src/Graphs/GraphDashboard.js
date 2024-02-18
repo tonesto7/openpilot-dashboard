@@ -112,6 +112,7 @@ class GraphDashboard extends Component {
     componentDidMount() {
         this.render_delay = setInterval(this.renderDelay, 1000 / this.state.rateHz); // Limit render? 4graphs/2lines or 2grapgs/8lines at 20Hz
         //Real measured - 2 graphs/2 lines at 50ms, 3 graphs/2 lines at ~80ms, 4graphs/2 lines at ~110ms, 5graphs/2 lines at ~140ms (So around 25-30ms each graph?)
+        console.log("Render delay set with rate:", this.state.rateHz);
     }
 
     componentWillUnmount() {
@@ -119,14 +120,20 @@ class GraphDashboard extends Component {
     }
 
     shouldComponentUpdate(prevProps, prevState) {
-        if (!this.props.active) return false;
-        if (prevState.render_revision !== this.state.render_revision || prevState.speeddial !== this.state.speeddial || prevState.show_addlines !== this.state.show_addlines || prevState.show_addgraph !== this.state.show_addgraph || prevState.show_settings !== this.state.show_settings) return true;
+        if (!this.props.active) {
+            return false;
+        }
+        if (prevState.render_revision !== this.state.render_revision || prevState.speeddial !== this.state.speeddial || prevState.show_addlines !== this.state.show_addlines || prevState.show_addgraph !== this.state.show_addgraph || prevState.show_settings !== this.state.show_settings) {
+            return true;
+        }
         return false;
     }
 
     renderDelay = () => {
         clearInterval(this.render_delay);
-        if (this.data_counter > this.state.render_revision) this.setState({ render_revision: this.data_counter });
+        if (this.data_counter > this.state.render_revision) {
+            this.setState({ render_revision: this.data_counter });
+        }
         this.render_delay = setInterval(this.renderDelay, 1000 / this.state.rateHz);
     };
 
@@ -145,13 +152,21 @@ class GraphDashboard extends Component {
                     const line_name = key_name + ":" + name_y;
                     if (Array.isArray(axis_y)) {
                         axis_y.forEach((y_value, index) => {
-                            if (typeof y_value === "boolean") y_value += 0; // Converts boolean to int
-                            if (typeof y_value !== "number") y_value = null;
+                            if (typeof y_value === "boolean") {
+                                y_value += 0; // Converts boolean to int
+                            }
+                            if (typeof y_value !== "number") {
+                                y_value = null;
+                            }
                             this.addUpdateLines(line_name + index, axis_x, y_value, this.state.max_datapoints); // Fix the name for Y axis !!!!!
                         });
                     } else {
-                        if (typeof axis_y === "boolean") axis_y += 0; // Converts boolean to int
-                        if (typeof axis_y !== "number") axis_y = null;
+                        if (typeof axis_y === "boolean") {
+                            axis_y += 0; // Converts boolean to int
+                        }
+                        if (typeof axis_y !== "number") {
+                            axis_y = null;
+                        }
                         this.addUpdateLines(name_y, axis_x, axis_y, this.state.max_datapoints);
                     }
                 }
@@ -167,7 +182,9 @@ class GraphDashboard extends Component {
             this.lines[name_y] = line_tpl;
         }
 
-        if (this.lines[name_y].x.slice(-1)[0] >= axis_x) return; // Skip same values for axis X (time)
+        if (this.lines[name_y].x.slice(-1)[0] >= axis_x) {
+            return; // Skip same values for axis X (time)
+        }
 
         this.lines[name_y].x.push(axis_x);
         this.lines[name_y].y.push(axis_y);
@@ -180,14 +197,18 @@ class GraphDashboard extends Component {
     };
 
     addUpdatePlots = (plot_name = "", datarevision = 0, lines = []) => {
-        if (plot_name.length === 0) plot_name = (Math.random() + 1).toString(36).substring(7); // Generate random name
+        if (plot_name.length === 0) {
+            plot_name = (Math.random() + 1).toString(36).substring(7); // Generate random name
+        }
         if (!this.plots[plot_name] && lines.length > 0) {
             const plot_tpl = JSON.parse(JSON.stringify(plot_def_tpl));
             plot_tpl["layout"]["title"] = plot_name;
             plot_tpl["lines_attach"] = lines;
             this.plots[plot_name] = plot_tpl;
         }
-        if (lines.length > 0) this.plots[plot_name].lines_attach = lines;
+        if (lines.length > 0) {
+            this.plots[plot_name].lines_attach = lines;
+        }
         if (this.plots[plot_name]) {
             this.plots[plot_name].revision = datarevision;
             this.plots[plot_name].layout.datarevision = datarevision;
