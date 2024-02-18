@@ -22,8 +22,8 @@ Version 0.1.2  (2021-02-07)
 Version 0.1.1  (2021-02-03)
 =========================
  * Settings for Joystick/Gamepad (axesModes, interpolation, deadzone)
- * Added served.py as a http server for local use and on C2/EON device (port 89)
- * Changed default port for WebSocket to 8989
+ * Added served.py as a http server for local use and on C2/EON device (port 8989)
+ * Changed default port for WebSocket to 8990
  
 Version 0.1  (2021-02-01)
 =========================
