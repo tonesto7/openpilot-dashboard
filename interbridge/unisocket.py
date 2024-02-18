@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import struct, pickle, json
 from base64 import b64encode
 from hashlib import sha1
